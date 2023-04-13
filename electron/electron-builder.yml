@@ -1,0 +1,22 @@
+appId: com.example.generate-template
+productName: GenerateTemplate
+directories:
+  output: "dist"
+  buildResources: "build"
+files:
+  - "!**/*"
+  - "build/**/*"
+  - "node_modules/**/*"
+  - "package.json"
+extraMetadata:
+  main: "main.js"
+asar: true
+win:
+  target:
+    - "nsis"
+mac:
+  target:
+    - "dmg"
+linux:
+  target:
+    - "AppImage"

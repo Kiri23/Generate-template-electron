@@ -1,0 +1,48 @@
+{
+  "name": "generate-templates",
+  "version": "0.1.0",
+  "author": {
+    "name": "Christian",
+    "email": "christian_nogueras94@hotmail.com"
+  },
+  "description": "Generate templates from a directory",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^8.0.1",
+    "electron-is-dev": "^1.2.0",
+    "wait-on": "^7.0.1"
+  },
+  "scripts": {
+    "postbuild": "copyfiles -u 1 electron.js build/",
+    "start": "electron main.js",
+    "electron-dev": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && npm run start\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "comment": "// need to copy the frontned build to the electron build. find out a way to do this",
+    "create-executable": "npm run postbuild && npm run pack && npm run dist"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "electron": "^24.1.1",
+    "electron-builder": "^24.2.1",
+    "electron-is-dev": "^2.0.0"
+  }
+}
