@@ -9,8 +9,10 @@ import {
   Button,
   Icon,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
+import "./MainPage.css";
 
 const MainPage: React.FC = () => {
   const [templates, setTemplates] = useState<string[]>([
@@ -33,31 +35,54 @@ const MainPage: React.FC = () => {
     // Implement the logic to duplicate the selected template
   };
 
+  const bgGradient = useColorModeValue(
+    'linear(to-br, teal.400, blue.500)',
+    'linear(to-br, teal.700, blue.800)'
+  );
+
   return (
-    <Center>
-      <VStack spacing={6}>
-        <Text fontSize="2xl">Select the template you want to duplicate</Text>
-        <UnorderedList spacing={3}>
-          {templates.map((template) => (
-            <ListItem
-              key={template}
-              onClick={() => handleTemplateSelect(template)}
-              cursor="pointer"
-            >
-              {selectedTemplate === template && <CheckIcon />}
-              {template}
-            </ListItem>
-          ))}
-        </UnorderedList>
-        <Input
-          type="file"
-          onChange={handleDestinationSelect}
-        />
-        <Button onClick={handleDuplicate} colorScheme="blue">
-          Duplicate
-        </Button>
-      </VStack>
-    </Center>
+    <Box>
+      <Center h="100%">
+        <VStack spacing={8} p={4} bgColor="white" borderRadius="lg" boxShadow="lg">
+          <Text fontSize="2xl" fontWeight="bold">
+            Select the template you want to duplicate
+          </Text>
+          <Box w="100%">
+            <UnorderedList spacing={3} listStyleType="none">
+              {templates.map((template) => (
+                <ListItem
+                  key={template}
+                  onClick={() => handleTemplateSelect(template)}
+                  cursor="pointer"
+                  bg="gray.100"
+                  borderRadius="md"
+                  py={2}
+                  px={4}
+                  display="flex"
+                  alignItems="center"
+                  _hover={{ bg: 'gray.200' }}
+                >
+                  {selectedTemplate === template && (
+                    <CheckIcon color="green.500" mr={2} />
+                  )}
+                  {template}
+                </ListItem>
+              ))}
+            </UnorderedList>
+          </Box>
+          <Input
+            type="file"
+            onChange={handleDestinationSelect}
+            boxShadow="inner"
+            p={1}
+            borderRadius="md"
+          />
+          <Button onClick={handleDuplicate} colorScheme="blue" size="lg">
+            Duplicate
+          </Button>
+        </VStack>
+      </Center>
+    </Box>
   );
 };
 
