@@ -1,87 +1,70 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Center,
-  UnorderedList,
-  ListItem,
-  VStack,
-  Input,
-  Button,
-  Icon,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
-import { CheckIcon } from '@chakra-ui/icons';
-import "./MainPage.css";
+import { Box, Heading, VStack, List, ListItem, Input, Button, Icon, Text } from '@chakra-ui/react';
+import { CheckIcon, AttachmentIcon } from '@chakra-ui/icons';
+import './mainPage.css';
 
 const MainPage: React.FC = () => {
-  const [templates, setTemplates] = useState<string[]>([
+  const templates = [
     'SlackBot',
     'FastAPI',
     'CLI tool',
-  ]);
+  ];
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
-  const [destination, setDestination] = useState<string | null>(null);
+  const [selectedPath, setSelectedPath] = useState<string | null>(null);
 
-  const handleTemplateSelect = (template: string) => {
-    setSelectedTemplate(template);
+  const handleTemplateClick = (template: string) => {
+      setSelectedTemplate((prevSelectedTemplate) =>
+        prevSelectedTemplate === template ? "" : template
+    );
   };
 
-  const handleDestinationSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDestination(e.target.value);
+  const handleFileInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedPath(event.target.files[0].path);
+    }
   };
 
   const handleDuplicate = () => {
-    // Implement the logic to duplicate the selected template
+    // Logic for duplicating the template in the selected destination
   };
 
-  const bgGradient = useColorModeValue(
-    'linear(to-br, teal.400, blue.500)',
-    'linear(to-br, teal.700, blue.800)'
-  );
-
   return (
-    <Box>
-      <Center h="100%">
-        <VStack spacing={8} p={4} bgColor="white" borderRadius="lg" boxShadow="lg">
-          <Text fontSize="2xl" fontWeight="bold">
-            Select the template you want to duplicate
-          </Text>
-          <Box w="100%">
-            <UnorderedList spacing={3} listStyleType="none">
-              {templates.map((template) => (
-                <ListItem
-                  key={template}
-                  onClick={() => handleTemplateSelect(template)}
-                  cursor="pointer"
-                  bg="gray.100"
-                  borderRadius="md"
-                  py={2}
-                  px={4}
-                  display="flex"
-                  alignItems="center"
-                  _hover={{ bg: 'gray.200' }}
-                >
-                  {selectedTemplate === template && (
-                    <CheckIcon color="green.500" mr={2} />
-                  )}
-                  {template}
-                </ListItem>
-              ))}
-            </UnorderedList>
-          </Box>
-          <Input
-            type="file"
-            onChange={handleDestinationSelect}
-            boxShadow="inner"
-            p={1}
-            borderRadius="md"
-          />
-          <Button onClick={handleDuplicate} colorScheme="blue" size="lg">
-            Duplicate
-          </Button>
-        </VStack>
-      </Center>
+    <Box className="container">
+      <Text fontSize="2xl" fontWeight="bold" className="title">
+        Select the template you want to duplicate
+      </Text>
+      <VStack as="ul" className="list" spacing={3}>
+      <List className="list" spacing={3}>
+  {templates.map((template) => (
+            <ListItem
+              as="li"
+              key={template}
+              onClick={() => handleTemplateClick(template)}
+              className={`list-item ${selectedTemplate === template ? 'selected' : ''}`}
+            >
+              {template}
+          {selectedTemplate === template && <Icon as={CheckIcon} ml={2} className="checkmark"/>}
+            </ListItem>
+          ))}
+        </List>
+      </VStack>
+      <Box className="input-wrapper">
+        <Input
+          type="file"
+          id="file"
+          className="input"
+          onChange={handleFileInput}
+        />
+        <label htmlFor="file" className="input-label">
+          <Icon as={AttachmentIcon} />
+          <span className="input-label-text">
+            {selectedPath ? 'Path selected' : 'Choose a destination'}
+          </span>
+        </label>
+      </Box>
+      <Button onClick={handleDuplicate} className="button">
+        Duplicate
+      </Button>
     </Box>
   );
 };
