@@ -14,8 +14,10 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon, AttachmentIcon, WarningIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
+import template from 'generate-template-shared-logic'
 
-const templates = ["SlackBot", "FastAPI", "CLI tool"];
+
+template.getTemplates().then((templates) => console.log(templates));
 
 const MainPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
