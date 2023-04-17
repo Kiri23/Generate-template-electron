@@ -1,4 +1,9 @@
-const { send,on } = window.electronAPI;
+let send = () => {};
+let on = () => {};
+if (window.electronAPI) {
+  send = window.electronAPI.send;
+  on = window.electronAPI.on;
+}
 
 export function sendMessageToMain(message, data) {
   send(message, data);
