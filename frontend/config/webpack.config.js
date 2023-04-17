@@ -300,8 +300,18 @@ module.exports = function (webpackEnv) {
       modules: ['node_modules', paths.appNodeModules].concat(
         modules.additionalModulePaths || []
       ),
-      fallback:{
+      fallback: {
+        "tls": false,
+        "net": false,
         "path": require.resolve("path-browserify"),
+        "zlib": false,
+        "http": false,
+        "https": false,
+        "stream": false,
+        "crypto": false,
+        "constants": false,
+        "assert": false,
+        "util": false,
       },
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support

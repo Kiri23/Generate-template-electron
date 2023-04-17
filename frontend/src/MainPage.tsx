@@ -14,10 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon, AttachmentIcon, WarningIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
-import template from 'generate-template-shared-logic'
+import { sendMessageToMain, subscribeToMessageFromMain } from "./service/electron";
 
-
-template.getTemplates().then((templates) => console.log(templates));
+const templates = ["SlackBot", "FastAPI", "CLI tool"];
 
 const MainPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
@@ -40,7 +39,11 @@ const MainPage = () => {
     document.getElementById("destination-input")?.click();
   };
 
-  const handleDuplicateClick = () => {
+  const handleDuplicateClick = async () => {
+    console.log(destination)
+    console.log(selectedTemplate)
+    sendMessageToMain("duplicate-template", { selectedTemplate, destination });
+    // await template.duplicateTemplate(selectedTemplate, destination)
     toast({
       title: "Template duplicated",
       description: `Template ${selectedTemplate} has been duplicated to ${destination}`,

@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -7,11 +7,13 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  if(isDev){
+    win.webContents.openDevTools();
+  }
 
   const startUrl = isDev
     ? 'http://localhost:3000'
@@ -32,4 +34,8 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+ipcMain.on("duplicate-template", (event, arg) => {
+  console.log(arg); // Prints the message from the React app
 });
