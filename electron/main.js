@@ -1,6 +1,7 @@
 const { app, BrowserWindow,ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const EVENTS = require('../events.json')
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -36,6 +37,6 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on("duplicate-template", (event, arg) => {
+ipcMain.on(EVENTS['duplicate-template'], (event, arg) => {
   console.log(arg); // Prints the message from the React app
 });

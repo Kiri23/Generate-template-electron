@@ -15,6 +15,7 @@ import {
 import { CheckIcon, AttachmentIcon, WarningIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { sendMessageToMain, subscribeToMessageFromMain } from "./service/electron";
+import EVENTS from "../../events.json"
 
 const templates = ["SlackBot", "FastAPI", "CLI tool"];
 
@@ -42,7 +43,7 @@ const MainPage = () => {
   const handleDuplicateClick = async () => {
     console.log(destination)
     console.log(selectedTemplate)
-    sendMessageToMain("duplicate-template", { selectedTemplate, destination });
+    sendMessageToMain(EVENTS["duplicate-template"], { selectedTemplate, destination });
     // await template.duplicateTemplate(selectedTemplate, destination)
     toast({
       title: "Template duplicated",
