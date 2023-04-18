@@ -4,14 +4,19 @@ let on = () => {};
 // If we are in the electron environment, we can use the electronAPI.
 // otherwise, don't throw an error on the the web browser.
 if (window.electronAPI) {
-  send = window.electronAPI.send;
-  on = window.electronAPI.on;
+  // this is not the same as the ipcRenderer.send() function
+  // since we filter out the channels that are not allowed.
+  send = window.electronAPI.whitelistedSend;
+  on = window.electronAPI.whitelistedOn;
 }
 
-export function sendMessageToMain(message, data) {
+// These names indicate that the messages being sent and received are 
+// restricted to whitelisted channels, 
+// making it clearer that there's a level of filtering involved.
+export function sendWhitelistedMessageToMain(message, data) {
   send(message, data);
 }
 
-export function subscribeToMessageFromMain(message, callback) {
+export function subscribeToWhitelistedMessageFromMain(message, callback) {
   on(message, callback);
 }
