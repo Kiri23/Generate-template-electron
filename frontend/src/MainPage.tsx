@@ -41,8 +41,6 @@ const MainPage = () => {
   };
 
   const handleDuplicateClick = async () => {
-    console.log(destination)
-    console.log(selectedTemplate)
     sendMessageToMain(EVENTS["duplicate-template"], { selectedTemplate, destination });
     // await template.duplicateTemplate(selectedTemplate, destination)
     toast({
@@ -53,6 +51,10 @@ const MainPage = () => {
       isClosable: true,
     });
   };
+
+  useEffect(() => {
+    
+    }, []);
 
   return (
     <VStack
