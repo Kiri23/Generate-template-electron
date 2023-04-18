@@ -37,6 +37,16 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on(EVENTS['duplicate-template'], (event, arg) => {
+ipcMain.on(EVENTS.duplicate_template, (event, arg) => {
   console.log(arg); // Prints the message from the React app
+});
+
+ipcMain.handle(EVENTS.select_template, (event, arg) => {
+  
+});
+
+// export the JSON file to the preload.js file
+// since we can't import it directly on the preload.js file
+ipcMain.handle("load_valid_channels_from_json_file", () => {  
+  return Object.keys(EVENTS);
 });

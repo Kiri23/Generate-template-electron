@@ -13,18 +13,17 @@ import {
   Tooltip
 } from "@chakra-ui/react";
 import { CheckIcon, AttachmentIcon, WarningIcon } from "@chakra-ui/icons";
-import React, { useState } from "react";
-import { sendMessageToMain, subscribeToMessageFromMain } from "./service/electron";
+import React, { useEffect, useState } from "react";
+import { sendWhitelistedMessageToMain, invokeWhitelistedMessageFromMain } from "./service/electron";
 import EVENTS from "../../events.json"
 
-const templates = ["SlackBot", "FastAPI", "CLI tool"];
-
 const MainPage = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [templates, setTemplates] = useState<({name: any, folder: string} | null)[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<({name: any, folder: string}| null)>(null);
   const [destination, setDestination] = useState<string | null>(null);
   const toast = useToast();
 
-  const handleTemplateClick = (template: string) => {
+  const handleTemplateClick = (template: {name: any, folder: string} | null) => {
     setSelectedTemplate((prevSelectedTemplate) =>
       prevSelectedTemplate === template ? null : template
     );
@@ -41,7 +40,7 @@ const MainPage = () => {
   };
 
   const handleDuplicateClick = async () => {
-    sendMessageToMain(EVENTS["duplicate-template"], { selectedTemplate, destination });
+    sendWhitelistedMessageToMain(EVENTS.duplicate_template, { selectedTemplate, destination });
     // await template.duplicateTemplate(selectedTemplate, destination)
     toast({
       title: "Template duplicated",
@@ -53,8 +52,14 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    
-    }, []);
+    const getTemplates = async () => {
+      const templates = await invokeWhitelistedMessageFromMain(EVENTS.select_template);
+      // the return type is void so it cause an issue on the set template function
+      setTemplates(templates as any);
+    };
+  
+    getTemplates();
+  }, []);  
 
   return (
     <VStack
@@ -77,9 +82,9 @@ const MainPage = () => {
           Select the template you want to duplicate
         </Text>
         <List spacing={4}>
-          {templates.map((template) => (
+          {templates?.map((template) => (
             <ListItem
-              key={template}
+              key={template?.folder}
               p={4}
               borderWidth={1}
               borderRadius="lg"
@@ -89,7 +94,7 @@ const MainPage = () => {
               className={`list-item ${selectedTemplate === template ? "selected" : ""}`}
               onClick={() => handleTemplateClick(template)}
             >
-              {template}
+              {template?.name}
               <Collapse in={selectedTemplate === template} animateOpacity>
                 <Icon as={CheckIcon} ml={2} />
               </Collapse>

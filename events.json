@@ -1,3 +1,4 @@
  {
-  "duplicate-template": "duplicate-template"
+  "duplicate_template": "duplicate_template",
+  "select_template": "select_template"
 }
