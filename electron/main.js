@@ -2,6 +2,7 @@ const { app, BrowserWindow,ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 const EVENTS = require('../events.json')
+const templateAdapters = require('./adapters/templateAdapters');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -37,12 +38,16 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on(EVENTS.duplicate_template, (event, arg) => {
-  console.log(arg); // Prints the message from the React app
+ipcMain.on(EVENTS.duplicate_template, async (event, {selectedTemplate, destination} = {}) => {
+  if (selectedTemplate && destination) {
+    await templateAdapters.duplicate_template(selectedTemplate, destination);
+    return;
+  }
+  console.error("Invalid arguments passed to duplicate_template");
 });
 
-ipcMain.handle(EVENTS.select_template, (event, arg) => {
-  
+ipcMain.handle(EVENTS.select_template, async () => {
+  return await templateAdapters.loadTemplates();
 });
 
 // export the JSON file to the preload.js file
